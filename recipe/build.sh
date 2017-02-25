@@ -78,4 +78,3 @@ ln -s "$INSTALL_DIR" "$PREFIX/gap/latest"
 rm "$INSTALL_DIR"/tst/testinstall/ctblsolv.tst
 rm "$INSTALL_DIR"/tst/testinstall/grppc.tst
 rm "$INSTALL_DIR"/tst/testinstall/morpheus.tst
-
