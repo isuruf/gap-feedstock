@@ -43,7 +43,7 @@ make
 cd pkg
 
 # Disable problematic packages. See https://github.com/conda-forge/gap-feedstock/pull/16
-for GAP_PKG_NAME in kbmag cohomolo guava example ace xgap anupq polymakeinterface fplsa;
+for GAP_PKG_NAME in kbmag cohomolo guava example ace xgap itc polymakeinterface fplsa;
 do
     PKG_DIR=`find . -maxdepth 1 -iname "$GAP_PKG_NAME-*" -type d`
     rm -rf $PKG_DIR
@@ -53,16 +53,12 @@ sed -i.bak "s@./build-normaliz.sh@echo@g" ../bin/BuildPackages.sh
 bash ../bin/BuildPackages.sh
 
 # Build semigroups with external libsemigroups
-# libsemigroups vendored and one from conda are ABI compatible
 SEMIGROUPS_PKG_DIR=`find . -maxdepth 1 -iname "semigroups-*" -type d`
 pushd $SEMIGROUPS_PKG_DIR
-./configure --with-graproot=$SRC_DIR --with-external-libsemigroups
-make
+make clean
 rm -rf src/libsemigroups
-rm -rf bin/lib
-if [[ "$target_platform" == "osx-64" ]]; then
-    ${INSTALL_NAME_TOOL} -change ${SRC_DIR}/pkg/${SEMIGROUPS_PKG_DIR:2}/src/libsemigroups/../../bin/lib/libsemigroups.0.dylib @rpath/libplanarity.0.dylib bin/64/semigroups.so
-fi
+./configure --with-graproot=$SRC_DIR --with-external-libsemigroups
+make 
 popd
 
 # Remove planarity and use the one from conda
